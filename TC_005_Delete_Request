@@ -1,0 +1,24 @@
+*** Settings ***
+Library  RequestsLibrary
+Library  JSONLibrary
+Library  Collections
+
+*** Variables ***
+${Application_Base_Url}     http://thetestingworldapi.com
+${Student_ID}       28
+
+*** Test Cases ***
+TC_005_Delete_Request
+    create session  Delete_Request  ${Application_Base_Url}
+    ${Response}=    delete request  Delete_Request  /api/technicalskills/${Student_ID}
+    ${actual_res}=    convert to string   ${Response.status_code}
+    should be equal  ${actual_res}    200
+    log to console  ${Response.status_code}
+    log to console  ${Response.content}
+
+    ${json_res}=    to json  ${Response.content}
+    @{status_list}=     get value from json  ${json_res}   status
+    ${status}=  get from list  ${status_list}   0
+    log to console  ${status}
+    should be equal  ${status}  false
+
