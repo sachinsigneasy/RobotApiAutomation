@@ -1,0 +1,19 @@
+*** Settings ***
+Library  RequestsLibrary
+Library  JSONLibrary
+Library  Collections
+
+*** Variables ***
+${Base_Url}   http://thetestingworldapi.com
+
+*** Test Cases ***
+TC_005_Post_Request
+    create session  Post_Request  ${Base_Url}
+    ${body}=    create dictionary  first_name=Testing middle_name=A last_name=Academy date_of_birth=20/01/2020
+    ${header}=  create dictionary   Content-Type=application/json
+    ${response}=    post request  Post_Request  api/studentsDetails  data=${body}  headers=${header}
+    ${code}=    convert to string  ${response.status_code}
+    log to console  ${code}
+    log to console  ${response.content}
+    should be equal  ${code}    201
+
